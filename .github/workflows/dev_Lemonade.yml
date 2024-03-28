@@ -32,6 +32,29 @@ jobs:
 
       - name: Build
         run: sudo bash -x ./build/build.sh
+
+      - name: Prepare release package
+        run: |
+              mkdir -p ./release
+              mv -f `find ./ -iname Lemonade*-*.zip` ./release/
+
+      - name: Prepare build config artifact
+        run: |
+            cp .config ./release/kernel_config_a50_Lemonade.txt
+  
+      - name: Upload build config artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Kernel Configs
+          path: 'release/kernel_config_a50_Lemonade.txt'
+          if-no-files-found: error
+  
+      - name: Upload release package
+        uses: actions/upload-artifact@v2
+        with:
+          name: Release
+          path: 'release'
+          if-no-files-found: error
     
   release:
     name: Release files and configs
