@@ -35,12 +35,12 @@ jobs:
 
       - name: Prepare release package
         run: |
-              mkdir -p ./release
-              mv -f `find ./ -iname Lemonade*-*.zip` ./release/
+            mkdir -p ./release
+            mv -f `find ./ -iname Lemonade*-*.zip` ./release/
 
       - name: Prepare build config artifact
         run: |
-             cp ./.config ./release/kernel_config_a50_Lemonade.txt
+            cp ./.config ./release/kernel_config_a50_Lemonade.txt
   
       - name: Upload build config artifact
         uses: actions/upload-artifact@v2
