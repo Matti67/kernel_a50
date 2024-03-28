@@ -1,0 +1,70 @@
+name: LemonKernel - Development Build Opensuse (Galaxy A50)
+
+on:
+  push:
+    branches:
+      - Lineage-20
+
+jobs:
+  build_Lemonade:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+      
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: szenius/set-timezone@v1.0
+        with:
+          timezoneLinux: "Europe/Rome"
+          timezoneMacos: "Europe/Rome"
+          timezoneWindows: "Italy Standard Time"
+
+      - name: Setting up the environment
+        run: |
+          sudo apt-get update -y
+          sudo apt-get upgrade -y
+          sudo apt-get install build-essential gcc-aarch64-linux-gnu -y
+
+      - name: Build
+        run: ./build.sh
+    
+  release:
+    name: Release files and configs
+    if: always()
+    needs: [build_Lemonade]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: szenius/set-timezone@v1.0
+      with:
+        timezoneLinux: "Europe/Rome"
+        timezoneMacos: "Europe/Rome"
+        timezoneWindows: "Italy Standard Time"
+
+    - name: Merge Releases
+      uses: actions/download-artifact@v2
+      with:
+        name: Release
+        path: release
+
+    - name: Delete build config files
+      run: |
+          set -eo pipefail
+          rm -rf ./release/kernel_config_*.txt
+
+    - name: Upload release
+      uses: Hs1r1us/Release-AIO@v1.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        # The name of the tag
+        tag_name: mainline-${{ github.run_number }}_a50dx
+        prerelease: true
+        release_name: Lemonade Stable
+        body_path: "./tools/make/release/a50-release.md"
+        asset_files: './release'
