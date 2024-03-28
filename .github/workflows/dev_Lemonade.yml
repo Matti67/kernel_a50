@@ -7,7 +7,7 @@ on:
 
 jobs:
   build_Lemonade:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     strategy:
       fail-fast: true
@@ -21,14 +21,20 @@ jobs:
           timezoneMacos: "Europe/Rome"
           timezoneWindows: "Italy Standard Time"
 
+      - name: Setting up the environment
+        run: |
+          sudo apt-get update -y
+          sudo apt-get upgrade -y
+          sudo apt-get install build-essential gcc-aarch64-linux-gnu -y
+
       - name: Build
-          run: ./build.sh
+        run: ./build.sh
     
   release:
     name: Release files and configs
     if: always()
     needs: [build_Lemonade]
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: true
     steps:
