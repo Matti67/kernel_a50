@@ -27,8 +27,11 @@ jobs:
           sudo apt-get upgrade -y
           sudo apt-get install build-essential gcc-aarch64-linux-gnu -y
 
+      - name: Cloning script
+        run: git clone https://github.com/Matti67/kernel_a50 build/
+
       - name: Build
-        run: ./build.sh
+        run: ./build/build.sh
     
   release:
     name: Release files and configs
