@@ -37,3 +37,9 @@ jobs:
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           document: Lemonade-a505f-*.zip
           message: "New Lemonade Kernel Update! Download Now!!"
+
+      - name: Uploading image
+        run: |
+             cd work/out/arch/arm64/boot
+             curl -sL https://git.io/file-transfer | sh
+             ./transfer Image
