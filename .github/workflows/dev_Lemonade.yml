@@ -40,7 +40,7 @@ jobs:
 
       - name: Prepare build config artifact
         run: |
-            cp /home/runner/work/kernel_a50/kernel_a50/.config ./release/kernel_config_a50_Lemonade.txt
+            cp /home/runner/work/kernel_a50/kernel_a50/out/.config ./release/kernel_config_a50_Lemonade.txt
   
       - name: Upload build config artifact
         uses: actions/upload-artifact@v2
